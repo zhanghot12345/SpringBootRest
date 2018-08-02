@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import java.util.Set;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -25,10 +29,36 @@ public class RestController {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private JedisPool jedisPool;
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String index()
     {
         return "Hello World";
+    }
+
+    @RequestMapping(value = "/testJedis", method = RequestMethod.GET)
+    public String jedisDemo()
+    {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.set("zmy", String.valueOf(System.currentTimeMillis()));
+
+            jedis.zadd("sose", 0, "car"); jedis.zadd("sose", 0, "bike");
+            Set<String> sose = jedis.zrange("sose", 0, -1);
+            return sose.toString();
+        }
+        finally {
+            if (jedis != null)
+            {
+                jedis.close();
+            }
+        }
+       
+        
+
     }
 
     @RequestMapping(value = "/findCity", method = RequestMethod.GET)

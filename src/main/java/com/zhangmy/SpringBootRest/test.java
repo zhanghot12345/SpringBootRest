@@ -1,19 +1,12 @@
 package com.zhangmy.SpringBootRest;
 
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class test {
     public static void main(String[] args) {
-        List<String> list = new ArrayList<String>();
-        for (int i = 0; i < 100000000; i++)
-        {
-            Double d = Math.random()*Math.random()*Math.random()*Math.random();
-            list.add(test.encode(d.toString()));
-            System.out.println(list.size());
-
-        }
+        HashMap<String, String> map = new HashMap<>();
+        map.put(null,null);
     }
 
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5',
