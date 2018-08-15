@@ -9,6 +9,9 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
 import java.util.Set;
 
 @org.springframework.web.bind.annotation.RestController
@@ -32,9 +36,29 @@ public class RestController {
     @Autowired
     private JedisPool jedisPool;
 
+    @Autowired
+    private DiscoveryClient client;
+
+    @Value("${spring.application.name}")
+    private String ApplicationName;
+
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String index()
     {
+        List<ServiceInstance> instanceList = client.getInstances(ApplicationName);
+
+        logger.info(ApplicationName);
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logger.info(String.valueOf(instanceList.size()));
+        for (ServiceInstance serviceInstance : instanceList)
+        {   logger.info("1");
+            logger.info(serviceInstance.getHost() + "   " + serviceInstance.getServiceId());
+        }
+
         return "Hello World";
     }
 

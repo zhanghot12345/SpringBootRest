@@ -28,7 +28,7 @@ public class SchedledConfiguration {
     public CronTriggerFactoryBean cronTriggerBean(MethodInvokingJobDetailFactoryBean jobDetail){
         CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean ();
         cronTriggerFactoryBean.setJobDetail (jobDetail.getObject ());
-        cronTriggerFactoryBean.setCronExpression ("0/5 * * * * ? ");//每5秒执行一次
+        cronTriggerFactoryBean.setCronExpression ("0/5 * * 1 * ? ");//每5秒执行一次
         cronTriggerFactoryBean.setName("myTrigger");
         return cronTriggerFactoryBean;
 
